@@ -1,11 +1,19 @@
 import Input from '@/components/Input'
 import Image from 'next/image'
 import { useCallback, useState } from 'react'
+import axios from 'axios'
+import { signIn } from 'next-auth/react'
+import { useRouter } from 'next/router'
+import { FcGoogle } from 'react-icons/fc'
+import { FaGithub } from 'react-icons/fa'
+
 export default function Auth() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [name, setName] = useState('')
     const [variant, setVariant] = useState<'register' | 'login'>('login')
+
+    const router = useRouter()
 
     const toggleVariant = useCallback(() => {
         setVariant((prev) => {
@@ -14,7 +22,40 @@ export default function Auth() {
             }
             return 'login'
         })
-    }, [variant])
+    }, [])
+
+    const login = useCallback(async () => {
+        try {
+            await signIn('credentials', {
+                redirect: false,
+                email,
+                password,
+                callbackUrl: '/',
+            })
+
+            alert('Login Success')
+            router.push('/')
+        } catch (error) {
+            console.log(error);
+        }
+    },[email, password, router])
+
+    const register = useCallback(async () => {
+        try {
+            const response = await axios.post('/api/register', {
+                name,
+                email,
+                password,
+            });
+            alert('Register Success')
+            login()
+            alert('Login Success')
+        } catch (error) {
+            console.log(error);
+        }
+    }, [email, name, password, login])
+
+
     return (
         <div
             className='relative h-full w-full bg-[url("/assets/hero.jpg")] bg-cover bg-center bg-no-repeat bg-fixed'
@@ -45,7 +86,7 @@ export default function Auth() {
                                         label='Name'
                                         type='text'
                                         id='name'
-                                        value={email}
+                                        value={name}
                                         onChange={
                                             (e) => {
                                                 setName(e.target.value)
@@ -77,11 +118,28 @@ export default function Auth() {
                                     }
                                 }
                             />
-                            <button className='bg-red-600 text-white px-4 py-2 rounded-md focus:outline-none focus:ring-2
+                            <button
+                                onClick={variant === 'login' ? login : register}
+                                className='bg-red-600 text-white px-4 py-2 rounded-md focus:outline-none focus:ring-2
                              focus:ring-red-600 focus:border-transparent transition hover:bg-red-700
                              '>
                                 {variant === 'login' ? 'Login' : 'Register'}
                             </button>
+                            <div
+                            className='flex flex-row items-center gap-4'
+                            >
+                                <div
+                                    onClick={() => signIn('google')}
+                                    className='w-10 h-10 bg-white rounded-full flex items-center justify-center transition'>
+                                    <FcGoogle size={30} />
+                                </div>
+                                <div
+                                    onClick={() => signIn('github', { callbackUrl: '/' })}
+                                    className='w-10 h-10 cursor-pointer bg-white rounded-full flex items-center justify-center transition'>
+                                    <FaGithub size={30} />
+                                </div>
+                                
+                            </div>
                             <p
                                 onClick={toggleVariant}
                                 className='text-neutral-500 mt-2'>
