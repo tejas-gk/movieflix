@@ -5,7 +5,7 @@ import { signOut } from 'next-auth/react'
 import { getSession } from 'next-auth/react'
 import { NextPageContext } from 'next'
 import { useCurrentUser } from '@/hooks/currentUser'
-
+import Navbar from '@/components/Navbar'
 const inter = Inter({ subsets: ['latin'] })
 
 export const getServerSideProps = async (context: NextPageContext) => {
@@ -35,11 +35,12 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <Navbar />
       <main className=''>
-        <button
+        {/* <button
           className='text-white'
-          onClick={() => signOut()}>Sign Out</button>
-        <h1 className='text-4xl font-bold text-white'>Hello {user?.email}</h1>
+          onClick={() => signOut()}>Sign Out</button> */}
+        {/* <h1 className='text-4xl font-bold text-white'>Hello {user?.email}</h1> */}
         
       </main>
     </>

@@ -31,18 +31,17 @@ export default function Auth() {
     const login = useCallback(async () => {
         try {
             await signIn('credentials', {
-                redirect: false,
                 email,
                 password,
-                callbackUrl: '/',
+                callbackUrl: '/profiles',
             })
 
             alert('Login Success')
-            router.push('/')
+            // router.push('/')
         } catch (error) {
             console.log(error);
         }
-    },[email, password, router])
+    },[email, password])
 
     const register = useCallback(async () => {
         try {
