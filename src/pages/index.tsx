@@ -6,7 +6,11 @@ import { getSession } from 'next-auth/react'
 import { NextPageContext } from 'next'
 import { useCurrentUser } from '@/hooks/currentUser'
 import Navbar from '@/components/Navbar'
+import Billboard from '@/components/Billboard'
+import MovieList from '@/components/MovieList'
+import useMovies  from '@/hooks/useMovieList'
 const inter = Inter({ subsets: ['latin'] })
+
 
 export const getServerSideProps = async (context: NextPageContext) => {
   const session = await getSession(context)
@@ -26,7 +30,7 @@ export const getServerSideProps = async (context: NextPageContext) => {
 
 export default function Home() {
   const { data:user } = useCurrentUser()
-  
+  const { data: movies = [] } = useMovies();
   return (
     <>
       <Head>
@@ -36,13 +40,17 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Navbar />
-      <main className=''>
+      {/* <main className=''> */}
         {/* <button
           className='text-white'
           onClick={() => signOut()}>Sign Out</button> */}
         {/* <h1 className='text-4xl font-bold text-white'>Hello {user?.email}</h1> */}
-        
-      </main>
+      <Billboard />
+      <MovieList
+        title='Popular Movies'
+        data={movies}
+      />
+      {/* </main> */}
     </>
   )
 }

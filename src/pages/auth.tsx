@@ -7,6 +7,26 @@ import { useRouter } from 'next/router'
 import { FcGoogle } from 'react-icons/fc'
 import { FaGithub } from 'react-icons/fa'
 import { useCurrentUser } from '@/hooks/currentUser'
+import { getSession } from 'next-auth/react'
+import { NextPageContext } from 'next'
+
+export const getServerSideProps = async (context: NextPageContext) => {
+    const session = await getSession(context)
+    if (session) {
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false,
+            },
+        }
+    }
+    return {
+        props: {
+        },
+    }
+}
+
+
 
 export default function Auth() {
     const [email, setEmail] = useState('')
@@ -15,7 +35,6 @@ export default function Auth() {
     const [variant, setVariant] = useState<'register' | 'login'>('login')
     const { data: user } = useCurrentUser()
 
-    
 
     const router = useRouter()
 
