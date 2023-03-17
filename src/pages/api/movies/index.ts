@@ -4,7 +4,7 @@ import prismaDB from "@/lib/prismaDB";
 import serverAuth from "@/lib/serverAuth";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    if(req.method === "GET") {
+    if(req.method !== "GET") {
         res.status(405).end()
     }
     
@@ -13,6 +13,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const movies = await prismaDB.movie.findMany();
         res.status(200).json(movies);
     } catch (error) {
-        
+        console.error(error);
+        res.status(500).end(); 
     }
 }

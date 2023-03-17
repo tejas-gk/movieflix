@@ -8,7 +8,7 @@ import { useCurrentUser } from '@/hooks/currentUser'
 import Navbar from '@/components/Navbar'
 import Billboard from '@/components/Billboard'
 import MovieList from '@/components/MovieList'
-import useMovies  from '@/hooks/useMovieList'
+import useMoviesList from '@/hooks/useMovieList'
 const inter = Inter({ subsets: ['latin'] })
 
 
@@ -29,8 +29,8 @@ export const getServerSideProps = async (context: NextPageContext) => {
 }
 
 export default function Home() {
-  const { data:user } = useCurrentUser()
-  const { data: movies = [] } = useMovies();
+  const { data: movies = [] } = useMoviesList();
+  console.log('de', movies)
   return (
     <>
       <Head>
@@ -40,17 +40,14 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Navbar />
-      {/* <main className=''> */}
-        {/* <button
-          className='text-white'
-          onClick={() => signOut()}>Sign Out</button> */}
-        {/* <h1 className='text-4xl font-bold text-white'>Hello {user?.email}</h1> */}
       <Billboard />
-      <MovieList
-        title='Popular Movies'
-        data={movies}
-      />
-      {/* </main> */}
+      <div>
+
+        <MovieList
+          title='Popular Movies'
+          data={movies}
+        />
+      </div>
     </>
   )
 }
