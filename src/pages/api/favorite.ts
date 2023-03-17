@@ -43,7 +43,7 @@ export default async function handler(
 
       const { movieId } = req.body;
 
-      const existingMovie = await prismadb.movie.findUnique({
+      const existingMovie = await prismaDB.movie.findUnique({
         where: {
           id: movieId,
         },
@@ -55,7 +55,7 @@ export default async function handler(
 
       const updatedFavoriteIds = without(currentUser.favoriteIds, movieId);
 
-      const updatedUser = await prismadb.user.update({
+      const updatedUser = await prismaDB.user.update({
         where: {
           email: currentUser.email || "",
         },

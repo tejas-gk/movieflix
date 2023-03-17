@@ -1,9 +1,14 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import useBillboard from '@/hooks/useBillboard'
 import { AiOutlineInfoCircle } from 'react-icons/ai'
+import useInfoModalStore from '@/hooks/useInfoModalStore'
+import PlayButton from './PlayButton';
 export default function Billboard() {
     const { billboard } = useBillboard()
-    console.log(billboard);
+    const {openModal}=useInfoModalStore()
+    const handleOpenModal = useCallback(() => {
+        openModal(billboard?.id)
+    }, [billboard?.id, openModal])
     return (
         <div className='relative h-[56.25vw]'>
             <video
@@ -25,7 +30,12 @@ export default function Billboard() {
                     {billboard?.description}
                 </p> 
                 <div className='flex flex-row items-center mt-3 md:mt-4 gap-3'>
-                    <button className='bg-white/30
+                    <PlayButton
+                        movieId={billboard?.id}
+                    />
+                    <button
+                        onClick={handleOpenModal}
+                        className='bg-white/30
                      text-white 
                      rounded-md 
                      py-1 md:py-2

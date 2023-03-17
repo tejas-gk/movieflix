@@ -9,6 +9,9 @@ import Navbar from '@/components/Navbar'
 import Billboard from '@/components/Billboard'
 import MovieList from '@/components/MovieList'
 import useMoviesList from '@/hooks/useMovieList'
+import useFavorites from '@/hooks/useFavorites'
+import InfoModal from '@/components/InfoModal'
+import useInfoModalStore from '@/hooks/useInfoModalStore';
 const inter = Inter({ subsets: ['latin'] })
 
 
@@ -30,7 +33,9 @@ export const getServerSideProps = async (context: NextPageContext) => {
 
 export default function Home() {
   const { data: movies = [] } = useMoviesList();
-  console.log('de', movies)
+  const { data: favorites = [] } = useFavorites();
+
+  const { isOpen, closeModal } = useInfoModalStore();
   return (
     <>
       <Head>
@@ -39,14 +44,13 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <InfoModal visible={isOpen} onClose={closeModal} />
+
       <Navbar />
       <Billboard />
-      <div>
-
-        <MovieList
-          title='Popular Movies'
-          data={movies}
-        />
+      <div className="pb-40 flex flex-col gap-28">
+        <MovieList title="Trending Now" data={movies} />
+        <MovieList title="My List" data={favorites} />
       </div>
     </>
   )

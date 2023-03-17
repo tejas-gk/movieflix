@@ -1,11 +1,17 @@
 import Image from 'next/image'
 import { BsFillPlayFill } from 'react-icons/bs'
+import FavoriteButton from './FavoriteButton'
+import { useRouter } from 'next/router'
+import { BiChevronDown } from 'react-icons/bi'
+import useInfoModalStore from '@/hooks/useInfoModalStore'
 interface MovieCardProps {
     data: Record<string, any>
 }
 export default function MovieCard({
     data,
 }: MovieCardProps) {
+  const router = useRouter()
+  const {openModal}=useInfoModalStore()
   return (
     <div className='group bg-zinc-900 col-span relative h-[12vh]'>
       <img
@@ -79,10 +85,30 @@ export default function MovieCard({
             transition duration-200
             group-hover:bg-neutral-100
           '
-              onClick={() => { }}
+              onClick={
+                () => router.push(`/watch/${data.id}`)
+              }
             >
               <BsFillPlayFill
                 size={30}
+              />
+            </div>
+            <FavoriteButton movieId={data.id} />
+            <div
+              onClick={() => {
+                openModal(data?.id)
+              }}
+              className="cursor-pointer 
+            ml-auto
+             w-6 h-6 
+             group/item
+            lg:w-10 lg:h-10
+             border-white botder-2 
+            rounded-full 
+            flex justify-center items-center transition 
+            hover:border-neutral-100">
+              <BiChevronDown size={30}
+                className='text-white group-hover/item:text-neutral-100 w-4'
               />
             </div>
           </div>
